@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ChartIndex } from '..'
 import './index.css'
 
@@ -22,6 +22,7 @@ interface ChartProps {
 }
 
 const Chart: React.FC<ChartProps> = ({ data, changeData, length }) => {
+  const [turn, setturn] = useState<ChartIndex>(ChartIndex.X)
   return (
     <div>
       {Array(length)
@@ -34,7 +35,8 @@ const Chart: React.FC<ChartProps> = ({ data, changeData, length }) => {
                 key={cell.toString() + i + j}
                 onClick={() => {
                   if (cell === ChartIndex.EMPTY) {
-                    changeData(i, j, 1)
+                    changeData(i, j, turn)
+                    setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
                   }
                 }}>
                 {valueToText(cell)}

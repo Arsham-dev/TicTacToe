@@ -1,17 +1,27 @@
 import { useEffect, useState } from 'react'
 import Chart from './Chart'
+import checkGameIsOver from './functions/checkGameIsOver'
 
 export enum ChartIndex {
   EMPTY,
   X,
   O
 }
+
 const length = 3
+
 const Page = () => {
   const [chartValue, setchartValue] = useState<ChartIndex[]>([])
+
   useEffect(() => {
-    setchartValue([1, 0, 2, 0, 1, 2, 2, 0, 1])
+    setchartValue([0, 0, 0, 0, 0, 0, 0, 0, 0])
   }, [])
+
+  useEffect(() => {
+    if (checkGameIsOver(chartValue, length)) {
+      alert('game over')
+    }
+  }, [chartValue])
 
   return (
     <div>
@@ -21,7 +31,6 @@ const Page = () => {
         changeData={(i, j, value) => {
           chartValue[i * length + j] = value
           setchartValue([...chartValue])
-          console.log(chartValue)
         }}
       />
     </div>
