@@ -1,0 +1,14 @@
+.cell {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #000;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: 40px;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
