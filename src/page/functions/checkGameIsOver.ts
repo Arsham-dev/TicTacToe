@@ -30,6 +30,10 @@ const checkGameIsOver = (chartValue: ChartIndex[], length: number): boolean => {
       }
     }
 
+    if (value) {
+      return true
+    }
+
     value = true
 
     for (let j = 0; j < data.length; j++) {
