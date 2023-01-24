@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
-import { ChartIndex } from '..'
+import React from 'react'
 import './index.css'
 
+export enum ChartIndex {
+  EMPTY,
+  X,
+  O
+}
 const valueToText = (value: ChartIndex) => {
   switch (value) {
     case ChartIndex.EMPTY:
@@ -19,10 +23,17 @@ interface ChartProps {
   length: number
   data: ChartIndex[]
   changeData: (i: number, j: number, value: ChartIndex) => void
+  turn: ChartIndex
+  setturn: (value: ChartIndex) => void
 }
 
-const Chart: React.FC<ChartProps> = ({ data, changeData, length }) => {
-  const [turn, setturn] = useState<ChartIndex>(ChartIndex.X)
+const Chart: React.FC<ChartProps> = ({
+  data,
+  changeData,
+  length,
+  turn,
+  setturn
+}) => {
   return (
     <div>
       {Array(length)

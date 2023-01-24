@@ -1,6 +1,9 @@
-import { ChartIndex } from '..'
+import { ChartIndex } from '../Chart'
 
-const checkGameIsOver = (chartValue: ChartIndex[], length: number): boolean => {
+const checkGameIsOver = (
+  chartValue: ChartIndex[],
+  length: number
+): ChartIndex | Boolean => {
   const data: ChartIndex[][] = [[]]
   if (chartValue.length === 0) return false
 
@@ -10,17 +13,17 @@ const checkGameIsOver = (chartValue: ChartIndex[], length: number): boolean => {
 
   for (let i = 0; i < data.length; i++) {
     const element = data[i]
-    if (element.every((item) => item === ChartIndex.X)) return true
-    if (element.every((item) => item === ChartIndex.O)) return true
+    if (element.every((item) => item === ChartIndex.X)) return ChartIndex.X
+    if (element.every((item) => item === ChartIndex.O)) return ChartIndex.O
   }
 
   for (let i = 0; i < data.length; i++) {
-    if (data.every((item) => item[i] === ChartIndex.X)) return true
-    if (data.every((item) => item[i] === ChartIndex.O)) return true
+    if (data.every((item) => item[i] === ChartIndex.X)) return ChartIndex.X
+    if (data.every((item) => item[i] === ChartIndex.O)) return ChartIndex.O
   }
 
   for (let i = 0; i < 2; i++) {
-    let value = true
+    let value: ChartIndex | boolean = i === 0 ? ChartIndex.X : ChartIndex.O
     const temp = i === 0 ? ChartIndex.X : ChartIndex.O
     for (let j = 0; j < data.length; j++) {
       if (data[j][j] === temp) continue
@@ -31,10 +34,10 @@ const checkGameIsOver = (chartValue: ChartIndex[], length: number): boolean => {
     }
 
     if (value) {
-      return true
+      return value
     }
 
-    value = true
+    value = i === 0 ? ChartIndex.X : ChartIndex.O
 
     for (let j = 0; j < data.length; j++) {
       if (data[j][data.length - j - 1] === temp) continue
@@ -45,7 +48,7 @@ const checkGameIsOver = (chartValue: ChartIndex[], length: number): boolean => {
     }
 
     if (value) {
-      return true
+      return value
     }
   }
 

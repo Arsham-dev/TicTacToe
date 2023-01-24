@@ -1,13 +1,28 @@
-import { ChartIndex } from '..'
+import { ChartIndex } from '../Chart'
+import checkGameIsOver from './checkGameIsOver'
 
-const createRandomChoice = (chartValue: ChartIndex[], node: ChartIndex) => {
-  const data: ChartIndex[][] = []
+export type Options = {
+  chartValue: ChartIndex[]
+  way: string
+}
+const createRandomChoice = (option: Options, node: ChartIndex) => {
+  const data: Options[] = []
 
-  chartValue.forEach((element, i) => {
+  if (
+    checkGameIsOver(option.chartValue, 3) ===
+    (node === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
+  ) {
+    return [{ chartValue: [...option.chartValue], way: option.way }]
+  }
+
+  option.chartValue.forEach((element, i) => {
     if (element === ChartIndex.EMPTY) {
-      const temp = [...chartValue]
+      const temp = [...option.chartValue]
       temp[i] = node
-      data.push(temp)
+      data.push({
+        chartValue: temp,
+        way: option.way + i.toString() + node.toString()
+      })
     }
   })
 
