@@ -45,20 +45,30 @@ const Page: React.FC<PageProps> = ({ length }) => {
         turn={turn}
         setturn={setturn}
       />
-      <button
-        style={{ marginTop: 20 }}
-        onClick={() => {
-          if (isGameOver) return
-          const answer = choiceTheNextMove(chartValue, 3, turn)
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <button
+          style={{ marginTop: 20, backgroundColor: 'tan' }}
+          onClick={() => {
+            if (isGameOver) return
+            const answer = choiceTheNextMove(chartValue, 3, turn)
 
-          if (answer) {
-            chartValue[Number(answer)] = turn
-            setchartValue([...chartValue])
-            setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
-          }
-        }}>
-        Move
-      </button>
+            if (answer) {
+              chartValue[Number(answer)] = turn
+              setchartValue([...chartValue])
+              setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
+            }
+          }}>
+          Move
+        </button>
+
+        <button
+          style={{ marginTop: 20, backgroundColor: 'ButtonFace' }}
+          onClick={() => {
+            window.location.reload()
+          }}>
+          Reset
+        </button>
+      </div>
     </div>
   )
 }
