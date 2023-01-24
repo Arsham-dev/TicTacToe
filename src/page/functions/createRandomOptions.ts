@@ -4,7 +4,7 @@ import createRandomChoice, { Options } from './createRandomChoice'
 const createRandomOptions = (
   chartValue: ChartIndex[],
   turn: ChartIndex,
-  level: number = 2
+  level: number
 ) => {
   let options: Options[] = [{ chartValue: [...chartValue], way: '' }]
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Chart, { ChartIndex } from './Chart'
 import checkGameIsOver from './functions/checkGameIsOver'
 import choiceTheNextMove from './functions/choiceTheNextMove'
+import { countEmptyNode } from './functions/countEmptyNode'
 
 interface PageProps {
   length: number
@@ -17,7 +18,10 @@ const Page: React.FC<PageProps> = ({ length }) => {
   }, [])
 
   useEffect(() => {
-    if (checkGameIsOver(chartValue, length)) {
+    if (
+      checkGameIsOver(chartValue, length) ||
+      countEmptyNode(chartValue) === 0
+    ) {
       setisGameOver(true)
       console.log('Game is over')
     }
@@ -44,14 +48,13 @@ const Page: React.FC<PageProps> = ({ length }) => {
       <button
         style={{ marginTop: 20 }}
         onClick={() => {
+          if (isGameOver) return
           const answer = choiceTheNextMove(chartValue, 3, turn)
 
           if (answer) {
-            setTimeout(() => {
-              chartValue[Number(answer)] = turn
-              setchartValue([...chartValue])
-              setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
-            }, 1)
+            chartValue[Number(answer)] = turn
+            setchartValue([...chartValue])
+            setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
           }
         }}>
         Move

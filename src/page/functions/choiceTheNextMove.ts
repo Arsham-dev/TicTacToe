@@ -1,5 +1,6 @@
 import { ChartIndex } from '../Chart'
 import checkGameIsOver from './checkGameIsOver'
+import { findEmptyNode } from './countEmptyNode'
 import createRandomOptions from './createRandomOptions'
 
 const choiceTheNextMove = (
@@ -23,16 +24,30 @@ const choiceTheNextMove = (
   let playerWin = playerRandomOption.filter(
     (item) => checkGameIsOver(item.chartValue, length) === turn
   )
+
+  console.log('playerWin', playerWin)
+  console.log('enemyWin', enemyWin)
+  console.log('playerRandomOption', playerRandomOption)
+
   if (playerWin.length === 0 && enemyWin.length > 0) {
     return enemyWin[0][0]
   } else if (playerWin.length > 0 && enemyWin.length > 0) {
     playerWin = playerWin.filter((item) =>
-      enemyWin[0].length === 2 ? item.way[0] === enemyWin[0][0] : true
+      enemyWin[0].length === 2 || enemyWin[0].length === 4
+        ? item.way[0] === enemyWin[0][0]
+        : true
     )
+    if (playerWin.length === 0) {
+      playerWin = playerRandomOption.filter(
+        (item) => checkGameIsOver(item.chartValue, length) === turn
+      )
+    }
   } else if (playerWin.length === 0 && enemyWin.length === 0) {
-    playerWin = playerRandomOption.filter(
-      (item) => checkGameIsOver(item.chartValue, length) === false
-    )
+    playerWin = playerRandomOption
+  }
+
+  if (playerRandomOption.length === 0) {
+    return findEmptyNode(chartValue).toString()
   }
 
   if (playerWin.length > 0) {
