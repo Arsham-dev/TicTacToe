@@ -4,7 +4,7 @@ import Page from './page'
 const App = () => {
   return (
     <div className="App">
-      <Page length={3} />
+      <Page />
     </div>
   )
 }

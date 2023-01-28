@@ -1,74 +1,105 @@
-import React, { useEffect, useState } from 'react'
-import Chart, { ChartIndex } from './Chart'
-import checkGameIsOver from './functions/checkGameIsOver'
-import choiceTheNextMove from './functions/choiceTheNextMove'
-import { countEmptyNode } from './functions/countEmptyNode'
+import { useState } from 'react'
+import MainModal from './modal'
 
-interface PageProps {
-  length: number
-}
-
-const Page: React.FC<PageProps> = ({ length }) => {
-  const [chartValue, setchartValue] = useState<ChartIndex[]>([])
-  const [isGameOver, setisGameOver] = useState<boolean>(false)
-  const [turn, setturn] = useState<ChartIndex>(ChartIndex.X)
-
-  useEffect(() => {
-    setchartValue(Array(length * length).fill(ChartIndex.EMPTY))
-  }, [])
-
-  useEffect(() => {
-    if (
-      checkGameIsOver(chartValue, length) ||
-      countEmptyNode(chartValue) === 0
-    ) {
-      setisGameOver(true)
-      console.log('Game is over')
-    }
-  }, [chartValue])
+const Page = () => {
+  const [isOpen, setisOpen] = useState(false)
+  const [gameType, setgameType] = useState<string>('')
+  const [length, setlength] = useState<number>(3)
 
   return (
     <div>
-      <div>
-        <h1>Turn: {turn === ChartIndex.X ? 'X' : 'O'}</h1>
-      </div>
-      {isGameOver && <h2>Game is over</h2>}
-      <Chart
-        data={chartValue}
-        length={length}
-        changeData={(i, j, value) => {
-          if (isGameOver) return
-
-          chartValue[i * length + j] = value
-          setchartValue([...chartValue])
-        }}
-        turn={turn}
-        setturn={setturn}
-      />
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <button
-          style={{ marginTop: 20, backgroundColor: 'tan' }}
-          onClick={() => {
-            if (isGameOver) return
-            const answer = choiceTheNextMove(chartValue, 3, turn)
-
-            if (answer) {
-              chartValue[Number(answer)] = turn
-              setchartValue([...chartValue])
-              setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
-            }
+      <form
+        style={{
+          backgroundColor: 'rgba(10,10,10,0.1)',
+          padding: '10px 20px',
+          borderRadius: 10
+        }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            margin: '10px 0'
           }}>
-          Move
-        </button>
-
-        <button
-          style={{ marginTop: 20, backgroundColor: 'ButtonFace' }}
-          onClick={() => {
-            window.location.reload()
+          <div>
+            <p
+              style={{
+                width: '100%',
+                color: '#000',
+                fontSize: 18
+              }}>
+              Game Type
+            </p>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="game-type"
+              id="person-bot"
+              checked={gameType === 'person-bot'}
+              onChange={() => setgameType('person-bot')}
+            />
+            &nbsp;
+            <label htmlFor="bot">Person Bot</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="game-type"
+              id="bot-bot"
+              checked={gameType === 'bot-bot'}
+              onChange={() => setgameType('bot-bot')}
+            />
+            &nbsp;
+            <label htmlFor="bot">Bot Bot</label>
+          </div>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}>
-          Reset
-        </button>
-      </div>
+          <div>
+            <p
+              style={{
+                width: '100%',
+                color: '#000',
+                fontSize: 18
+              }}>
+              <label>Length</label>
+            </p>
+          </div>
+          <div>
+            <input
+              type="number"
+              min={3}
+              max={5}
+              value={length}
+              onChange={(event) =>
+                setlength(
+                  Number(event.target.value) > 6
+                    ? 6
+                    : Number(event.target.value) > 2
+                    ? Number(event.target.value)
+                    : 3
+                )
+              }
+            />
+          </div>
+        </div>
+      </form>
+      <button onClick={() => setisOpen(!isOpen)} style={{ marginTop: 20 }}>
+        Open
+      </button>
+      {isOpen && (
+        <MainModal
+          isOpen={isOpen}
+          onClose={() => setisOpen(false)}
+          length={length}
+        />
+      )}
     </div>
   )
 }

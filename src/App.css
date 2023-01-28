@@ -10,3 +10,8 @@
   align-items: center;
   justify-content: center;
 }
+button {
+  background-color: #4caf50;
+  border: none;
+  outline: none;
+}
