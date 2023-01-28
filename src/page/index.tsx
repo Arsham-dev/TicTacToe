@@ -5,14 +5,20 @@ const Page = () => {
   const [isOpen, setisOpen] = useState(false)
   const [gameType, setgameType] = useState<string>('person-bot')
   const [length, setlength] = useState<number>(3)
+  const [gameLevel, setgameLevel] = useState<number>(1)
 
   return (
     <div>
       <form
         style={{
           backgroundColor: 'rgba(10,10,10,0.1)',
-          padding: '10px 20px',
-          borderRadius: 10
+          padding: '10px 10px',
+          width: 150,
+          display: 'flex',
+          borderRadius: 10,
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column'
         }}>
         <div
           style={{
@@ -52,6 +58,57 @@ const Page = () => {
             />
             &nbsp;
             <label htmlFor="bot">Bot Bot</label>
+          </div>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            margin: '10px 0'
+          }}>
+          <div>
+            <p
+              style={{
+                width: '100%',
+                color: '#000',
+                fontSize: 18
+              }}>
+              Game Level
+            </p>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="game-level"
+              id="easy"
+              checked={gameLevel === 1}
+              onChange={() => setgameLevel(1)}
+            />
+            &nbsp;
+            <label htmlFor="easy">Easy</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="game-level"
+              id="regular"
+              checked={gameLevel === 3}
+              onChange={() => setgameLevel(3)}
+            />
+            &nbsp;
+            <label htmlFor="regular">Regular</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="game-level"
+              id="hard"
+              checked={gameLevel === 5}
+              onChange={() => setgameLevel(5)}
+            />
+            &nbsp;
+            <label htmlFor="hard">Hard</label>
           </div>
         </div>
         <div
@@ -99,6 +156,7 @@ const Page = () => {
           onClose={() => setisOpen(false)}
           length={length}
           isBotBattle={gameType === 'bot-bot'}
+          gameLevel={gameLevel}
         />
       )}
     </div>

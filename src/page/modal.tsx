@@ -11,13 +11,15 @@ interface PageProps {
   isOpen: boolean
   onClose?: () => void
   isBotBattle?: boolean
+  gameLevel: number
 }
 
 const MainModal: React.FC<PageProps> = ({
   length,
   isOpen,
   onClose,
-  isBotBattle
+  isBotBattle,
+  gameLevel
 }) => {
   const [chartValue, setchartValue] = useState<ChartIndex[]>([])
   const [isGameOver, setisGameOver] = useState<boolean>(false)
@@ -49,7 +51,7 @@ const MainModal: React.FC<PageProps> = ({
       setturn(turnMove)
       setTimeout(
         () => move(turnMove === ChartIndex.X ? ChartIndex.O : ChartIndex.X),
-        500
+        100
       )
     }
   }
@@ -97,7 +99,7 @@ const MainModal: React.FC<PageProps> = ({
             style={{ marginTop: 20, backgroundColor: 'tan' }}
             onClick={() => {
               if (isGameOver) return
-              const answer = choiceTheNextMove(chartValue, 3, turn)
+              const answer = choiceTheNextMove(chartValue, gameLevel, turn)
 
               if (answer) {
                 chartValue[Number(answer)] = turn
