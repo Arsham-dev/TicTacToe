@@ -41,12 +41,12 @@ const MainModal: React.FC<PageProps> = ({
     if (checkGameIsOver(chartValue, length)) {
       return
     }
-    const answer = choiceTheNextMove(chartValue, 3, turnMove)
+    const answer = choiceTheNextMove(chartValue, 5, turnMove, length)
 
     if (answer) {
       chartValue[Number(answer)] = turnMove
       setchartValue([...chartValue])
-      setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
+      setturn(turnMove)
       setTimeout(
         () => move(turnMove === ChartIndex.X ? ChartIndex.O : ChartIndex.X),
         500
@@ -56,6 +56,7 @@ const MainModal: React.FC<PageProps> = ({
 
   return (
     <Modal
+      ariaHideApp={false}
       isOpen={isOpen}
       onRequestClose={onClose}
       style={{

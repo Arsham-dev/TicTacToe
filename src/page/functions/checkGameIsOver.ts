@@ -1,4 +1,5 @@
 import { ChartIndex } from '../Chart'
+import { countEmptyNode } from './countEmptyNode'
 
 const checkGameIsOver = (
   chartValue: ChartIndex[],
@@ -6,6 +7,7 @@ const checkGameIsOver = (
 ): ChartIndex | Boolean => {
   const data: ChartIndex[][] = [[]]
   if (chartValue.length === 0) return false
+  if (countEmptyNode(chartValue) === 0) return true
 
   for (let i = 0; i < length; i++) {
     data[i] = chartValue.slice(i * length, (i + 1) * length)
