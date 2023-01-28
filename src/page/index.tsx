@@ -3,7 +3,7 @@ import MainModal from './modal'
 
 const Page = () => {
   const [isOpen, setisOpen] = useState(false)
-  const [gameType, setgameType] = useState<string>('')
+  const [gameType, setgameType] = useState<string>('person-bot')
   const [length, setlength] = useState<number>(3)
 
   return (
@@ -98,6 +98,7 @@ const Page = () => {
           isOpen={isOpen}
           onClose={() => setisOpen(false)}
           length={length}
+          isBotBattle={gameType === 'bot-bot'}
         />
       )}
     </div>

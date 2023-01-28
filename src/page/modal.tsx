@@ -37,6 +37,23 @@ const MainModal: React.FC<PageProps> = ({
     }
   }, [chartValue])
 
+  const move = (turnMove: ChartIndex) => {
+    if (checkGameIsOver(chartValue, length)) {
+      return
+    }
+    const answer = choiceTheNextMove(chartValue, 3, turnMove)
+
+    if (answer) {
+      chartValue[Number(answer)] = turnMove
+      setchartValue([...chartValue])
+      setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
+      setTimeout(
+        () => move(turnMove === ChartIndex.X ? ChartIndex.O : ChartIndex.X),
+        500
+      )
+    }
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -74,7 +91,7 @@ const MainModal: React.FC<PageProps> = ({
         setturn={setturn}
       />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {isBotBattle && (
+        {!isBotBattle && (
           <button
             style={{ marginTop: 20, backgroundColor: 'tan' }}
             onClick={() => {
@@ -88,6 +105,15 @@ const MainModal: React.FC<PageProps> = ({
               }
             }}>
             Move
+          </button>
+        )}
+        {isBotBattle && (
+          <button
+            style={{ marginTop: 20, backgroundColor: 'tan' }}
+            onClick={() => {
+              move(turn)
+            }}>
+            Start
           </button>
         )}
 

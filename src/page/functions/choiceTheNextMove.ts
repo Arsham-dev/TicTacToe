@@ -25,10 +25,6 @@ const choiceTheNextMove = (
     (item) => checkGameIsOver(item.chartValue, length) === turn
   )
 
-  console.log('playerWin', playerWin)
-  console.log('enemyWin', enemyWin)
-  console.log('playerRandomOption', playerRandomOption)
-
   if (playerWin.length === 0 && enemyWin.length > 0) {
     return enemyWin[0][0]
   } else if (playerWin.length > 0 && enemyWin.length > 0) {
