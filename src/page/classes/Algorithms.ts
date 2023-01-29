@@ -1,5 +1,5 @@
 import { ChartIndex } from '../Chart'
-import checkGameIsOver from '../functions/checkGameIsOver'
+import checkGameIsOver from '../Functions/checkGameIsOver'
 import NodeStatus from './Node'
 
 class Algorithms {
@@ -15,20 +15,20 @@ class Algorithms {
     this.enemyTurn = turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X
   }
 
-  private CreateSuccessors(node: NodeStatus, sign: ChartIndex): NodeStatus[] {
-    const successors: NodeStatus[] = []
+  private createNewOptions(node: NodeStatus, sign: ChartIndex): NodeStatus[] {
+    const options: NodeStatus[] = []
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (node.state![i * 3 + j] === ChartIndex.EMPTY) {
           const newState = node.state!.slice()
           newState[i * 3 + j] = sign
           const newNode = new NodeStatus(node, newState)
-          successors.push(newNode)
+          options.push(newNode)
         }
       }
     }
-    node.successors = successors
-    return successors
+    node.options = options
+    return options
   }
 
   private minValue(
@@ -38,20 +38,21 @@ class Algorithms {
     depth: number
   ) {
     if (depth === 0 || checkGameIsOver(node.state, 3)) {
-      return this.evaluation(node.state)
+      return this.evaluationFunction(node.state)
     }
 
-    let v = Infinity
-    const children = this.CreateSuccessors(node, this.enemyTurn)
+    let num = Infinity
+    const children = this.createNewOptions(node, this.enemyTurn)
 
     for (let i = 0; i < children.length; i++) {
       const element = children[i]
-      v = Math.min(v, this.maxValue(element, alpha, beta, depth - 1))
-      element.value = v
+
+      num = Math.min(num, this.maxValue(element, alpha, beta, depth - 1))
+      element.value = num
     }
 
-    node.value = v
-    return v
+    node.value = num
+    return num
   }
 
   private maxValue(
@@ -61,31 +62,31 @@ class Algorithms {
     depth: number
   ): number {
     if (depth === 0 || checkGameIsOver(node.state, 3)) {
-      return this.evaluation(node.state)
+      return this.evaluationFunction(node.state)
     }
-    let v = -Infinity
-    const children = this.CreateSuccessors(node, this.turn)
+    let num = -Infinity
+    const children = this.createNewOptions(node, this.turn)
 
     for (let i = 0; i < children.length; i++) {
       const element = children[i]
 
       element.value = this.minValue(element, alpha, beta, depth - 1)
 
-      v = Math.max(v, element.value)
-      element.value = v
+      num = Math.max(num, element.value)
+      element.value = num
     }
 
-    node.value = v
-    return v
+    node.value = num
+    return num
   }
 
   public minMax(state?: ChartIndex[]): ChartIndex[] | null {
     const node = new NodeStatus(null, state)
 
-    let v = this.maxValue(node, -Infinity, Infinity, this.depth)
+    let num = this.maxValue(node, -Infinity, Infinity, this.depth)
 
-    if (node.successors && node.successors.length > 0) {
-      return node.successors.find((item) => item.value === v)!.state
+    if (node.options && node.options.length > 0) {
+      return node.options.find((item) => item.value === num)!.state
     }
 
     return null
@@ -98,11 +99,11 @@ class Algorithms {
     depth: number
   ) {
     if (depth === 0 || checkGameIsOver(node.state, 3)) {
-      return this.evaluation(node.state)
+      return this.evaluationFunction(node.state)
     }
 
     let num = Infinity
-    const children = this.CreateSuccessors(node, this.enemyTurn)
+    const children = this.createNewOptions(node, this.enemyTurn)
 
     for (let i = 0; i < children.length; i++) {
       const element = children[i]
@@ -131,42 +132,45 @@ class Algorithms {
     depth: number
   ): number {
     if (depth === 0 || checkGameIsOver(node.state, 3)) {
-      return this.evaluation(node.state)
+      return this.evaluationFunction(node.state)
     }
 
-    const children = this.CreateSuccessors(node, this.turn)
-    let v = -Infinity
+    const children = this.createNewOptions(node, this.turn)
+    let num = -Infinity
 
     for (let i = 0; i < children.length; i++) {
       const element = children[i]
 
-      v = Math.max(v, this.minValueAlphaBeta(element, alpha, beta, depth - 1))
-      element.value = v
+      num = Math.max(
+        num,
+        this.minValueAlphaBeta(element, alpha, beta, depth - 1)
+      )
+      element.value = num
 
-      if (v >= beta) {
-        return v
+      if (num >= beta) {
+        return num
       }
 
-      alpha = Math.max(alpha, v)
+      alpha = Math.max(alpha, num)
     }
 
-    node.value = v
-    return v
+    node.value = num
+    return num
   }
 
-  public AlphaBeta(state?: ChartIndex[]): ChartIndex[] | null {
+  public alphaBeta(state?: ChartIndex[]): ChartIndex[] | null {
     const node = new NodeStatus(null, state)
 
     let v = this.maxValueAlphaBeta(node, -Infinity, Infinity, this.depth)
 
-    if (node.successors && node.successors.length > 0) {
-      return node.successors.find((item) => item.value === v)!.state
+    if (node.options && node.options.length > 0) {
+      return node.options.find((item) => item.value === v)!.state
     }
 
     return null
   }
 
-  private evaluation(state: ChartIndex[]): number {
+  private evaluationFunction(state: ChartIndex[]): number {
     let ans = 0
 
     for (let i = 0; i < 3; i++) {

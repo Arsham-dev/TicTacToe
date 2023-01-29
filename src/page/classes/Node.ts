@@ -5,19 +5,19 @@ class NodeStatus {
 
   state: ChartIndex[]
 
-  successors?: NodeStatus[]
+  options?: NodeStatus[]
 
   value?: number
 
   constructor(
     parent?: NodeStatus | null,
     state?: ChartIndex[],
-    successors?: NodeStatus[],
+    options?: NodeStatus[],
     value?: number
   ) {
     this.parent = parent
     this.state = state!
-    this.successors = successors
+    this.options = options
     this.value = value
   }
 }

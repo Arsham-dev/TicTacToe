@@ -2,9 +2,9 @@ import Modal from 'react-modal'
 
 import React, { useEffect, useState } from 'react'
 import Chart, { ChartIndex } from './Chart'
-import checkGameIsOver from './functions/checkGameIsOver'
-import { countEmptyNode } from './functions/countEmptyNode'
-import Algorithms from './classes/Algorithms'
+import checkGameIsOver from './Functions/checkGameIsOver'
+import Algorithms from './Classes/Algorithms'
+import { countEmptyNode } from './Functions/countEmptyNode'
 
 interface PageProps {
   length: number
@@ -42,8 +42,19 @@ const MainModal: React.FC<PageProps> = ({
     if (checkGameIsOver(chartValue, length)) {
       return
     }
+
     const algoritm = new Algorithms(gameLevel, turnMove)
-    const answer = algoritm.AlphaBeta(chart)
+
+    const AlphaBetaStartTime = performance.now()
+    const answer = algoritm.alphaBeta(chart)
+    const AlphaBetaEndTime = performance.now()
+
+    const maxMinStartTime = performance.now()
+    algoritm.minMax(chart)
+    const maxMinEndTime = performance.now()
+
+    console.log(`AlphaBeta time: ${AlphaBetaEndTime - AlphaBetaStartTime} ms`)
+    console.log(`MinMax time: ${maxMinEndTime - maxMinStartTime} ms`)
 
     if (answer) {
       setchartValue([...answer])
@@ -102,7 +113,19 @@ const MainModal: React.FC<PageProps> = ({
             onClick={() => {
               if (isGameOver) return
               const algoritm = new Algorithms(gameLevel, turn)
-              const answer = algoritm.AlphaBeta(chartValue)
+              const AlphaBetaStartTime = performance.now()
+              const answer = algoritm.alphaBeta(chartValue)
+              const AlphaBetaEndTime = performance.now()
+
+              const maxMinStartTime = performance.now()
+              algoritm.minMax(chartValue)
+              const maxMinEndTime = performance.now()
+
+              console.log(
+                `AlphaBeta time: ${AlphaBetaEndTime - AlphaBetaStartTime} ms`
+              )
+              console.log(`MinMax time: ${maxMinEndTime - maxMinStartTime} ms`)
+
               if (answer) {
                 setchartValue([...answer])
                 setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
