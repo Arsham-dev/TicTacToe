@@ -5,6 +5,7 @@ import Chart, { ChartIndex } from './Chart'
 import checkGameIsOver from './functions/checkGameIsOver'
 import choiceTheNextMove from './functions/choiceTheNextMove'
 import { countEmptyNode } from './functions/countEmptyNode'
+import Algorithms from './classes/Algorithms'
 
 interface PageProps {
   length: number
@@ -99,11 +100,17 @@ const MainModal: React.FC<PageProps> = ({
             style={{ marginTop: 20, backgroundColor: 'tan' }}
             onClick={() => {
               if (isGameOver) return
-              const answer = choiceTheNextMove(chartValue, gameLevel, turn)
+              // const answer = choiceTheNextMove(chartValue, gameLevel, turn)
 
+              // if (answer) {
+              //   chartValue[Number(answer)] = turn
+              //   setchartValue([...chartValue])
+              //   setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
+              // }
+              const algoritm = new Algorithms(7)
+              const answer = algoritm.AlphaBeta(chartValue)
               if (answer) {
-                chartValue[Number(answer)] = turn
-                setchartValue([...chartValue])
+                setchartValue([...answer])
                 setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
               }
             }}>
