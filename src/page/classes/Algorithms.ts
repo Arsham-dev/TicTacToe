@@ -9,19 +9,22 @@ class Algorithms {
 
   private enemyTurn!: ChartIndex
 
-  constructor(depth: number, turn: ChartIndex) {
+  private length!: number
+
+  constructor(depth: number, turn: ChartIndex, length: number) {
     this.depth = depth
     this.turn = turn
     this.enemyTurn = turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X
+    this.length = length
   }
 
   private createNewOptions(node: NodeStatus, sign: ChartIndex): NodeStatus[] {
     const options: NodeStatus[] = []
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (node.state![i * 3 + j] === ChartIndex.EMPTY) {
+    for (let i = 0; i < this.length; i++) {
+      for (let j = 0; j < this.length; j++) {
+        if (node.state![i * this.length + j] === ChartIndex.EMPTY) {
           const newState = node.state!.slice()
-          newState[i * 3 + j] = sign
+          newState[i * this.length + j] = sign
           const newNode = new NodeStatus(node, newState)
           options.push(newNode)
         }
@@ -37,7 +40,7 @@ class Algorithms {
     beta: number,
     depth: number
   ) {
-    if (depth === 0 || checkGameIsOver(node.state, 3)) {
+    if (depth === 0 || checkGameIsOver(node.state, this.length)) {
       return this.evaluationFunction(node.state)
     }
 
@@ -61,7 +64,7 @@ class Algorithms {
     beta: number,
     depth: number
   ): number {
-    if (depth === 0 || checkGameIsOver(node.state, 3)) {
+    if (depth === 0 || checkGameIsOver(node.state, this.length)) {
       return this.evaluationFunction(node.state)
     }
     let num = -Infinity
@@ -98,7 +101,7 @@ class Algorithms {
     beta: number,
     depth: number
   ) {
-    if (depth === 0 || checkGameIsOver(node.state, 3)) {
+    if (depth === 0 || checkGameIsOver(node.state, this.length)) {
       return this.evaluationFunction(node.state)
     }
 
@@ -131,7 +134,7 @@ class Algorithms {
     beta: number,
     depth: number
   ): number {
-    if (depth === 0 || checkGameIsOver(node.state, 3)) {
+    if (depth === 0 || checkGameIsOver(node.state, this.length)) {
       return this.evaluationFunction(node.state)
     }
 
@@ -173,8 +176,8 @@ class Algorithms {
   private evaluationFunction(state: ChartIndex[]): number {
     let ans = 0
 
-    for (let i = 0; i < 3; i++) {
-      const row = state.slice(i * 3, i * 3 + 3)
+    for (let i = 0; i < this.length; i++) {
+      const row = state.slice(i * this.length, i * this.length + this.length)
 
       if (
         row.every((item) => item === this.turn || item === ChartIndex.EMPTY)
@@ -196,7 +199,7 @@ class Algorithms {
         ans -= 1
       }
 
-      const col = state.filter((item, index) => index % 3 === i)
+      const col = state.filter((item, index) => index % this.length === i)
 
       if (
         col.every((item) => item === this.turn || item === ChartIndex.EMPTY)
@@ -218,8 +221,15 @@ class Algorithms {
         ans -= 1
       }
     }
-    const diagonalOne = [state[0], state[4], state[8]]
-    const diagonalTwo = [state[2], state[4], state[6]]
+
+    const diagonalOne = []
+    for (let i = 0; i < Math.floor(Math.sqrt(state.length)); i++) {
+      diagonalOne.push(state[i * this.length + i])
+    }
+    const diagonalTwo = []
+    for (let i = 0; i < Math.floor(Math.sqrt(state.length)); i++) {
+      diagonalTwo.push(state[i * this.length + this.length - 1 - i])
+    }
 
     if (
       diagonalOne.every(

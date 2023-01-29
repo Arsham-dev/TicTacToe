@@ -4,7 +4,7 @@ import MainModal from './modal'
 const Page = () => {
   const [isOpen, setisOpen] = useState(false)
   const [gameType, setgameType] = useState<string>('person-bot')
-  // const [length, setlength] = useState<number>(3)
+  const [length, setlength] = useState<number>(3)
   const [gameLevel, setgameLevel] = useState<number>(1)
 
   return (
@@ -111,7 +111,7 @@ const Page = () => {
             <label htmlFor="hard">Hard</label>
           </div>
         </div>
-        {/* <div
+        <div
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -132,12 +132,12 @@ const Page = () => {
             <input
               type="number"
               min={3}
-              max={5}
+              max={9}
               value={length}
               onChange={(event) =>
                 setlength(
-                  Number(event.target.value) > 6
-                    ? 6
+                  Number(event.target.value) > 7
+                    ? 7
                     : Number(event.target.value) > 2
                     ? Number(event.target.value)
                     : 3
@@ -145,7 +145,7 @@ const Page = () => {
               }
             />
           </div>
-        </div> */}
+        </div>
       </form>
       <button onClick={() => setisOpen(!isOpen)} style={{ marginTop: 20 }}>
         Open
@@ -154,7 +154,7 @@ const Page = () => {
         <MainModal
           isOpen={isOpen}
           onClose={() => setisOpen(false)}
-          length={3}
+          length={length}
           isBotBattle={gameType === 'bot-bot'}
           gameLevel={gameLevel}
         />

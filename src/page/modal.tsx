@@ -43,18 +43,24 @@ const MainModal: React.FC<PageProps> = ({
       return
     }
 
-    const algoritm = new Algorithms(gameLevel, turnMove)
+    const algoritm = new Algorithms(
+      gameLevel - Math.floor((length - 3) * 1.5),
+      turnMove,
+      length
+    )
 
     const AlphaBetaStartTime = performance.now()
     const answer = algoritm.alphaBeta(chart)
     const AlphaBetaEndTime = performance.now()
 
-    const maxMinStartTime = performance.now()
-    algoritm.minMax(chart)
-    const maxMinEndTime = performance.now()
+    if (length === 3) {
+      const maxMinStartTime = performance.now()
+      algoritm.minMax(chart)
+      const maxMinEndTime = performance.now()
+      console.log(`MinMax time: ${maxMinEndTime - maxMinStartTime} ms`)
+    }
 
     console.log(`AlphaBeta time: ${AlphaBetaEndTime - AlphaBetaStartTime} ms`)
-    console.log(`MinMax time: ${maxMinEndTime - maxMinStartTime} ms`)
 
     if (answer) {
       setchartValue([...answer])
@@ -82,7 +88,7 @@ const MainModal: React.FC<PageProps> = ({
           bottom: 'auto',
           marginRight: '-50%',
           transform: 'translate(-50%, -50%)',
-          width: 400,
+          minWidth: 400,
           alignItems: 'center',
           justifyContent: 'center',
           display: 'flex',
@@ -112,19 +118,27 @@ const MainModal: React.FC<PageProps> = ({
             style={{ marginTop: 20, backgroundColor: 'tan' }}
             onClick={() => {
               if (isGameOver) return
-              const algoritm = new Algorithms(gameLevel, turn)
+              const algoritm = new Algorithms(
+                gameLevel - Math.floor((length - 3) * 1.5),
+                turn,
+                length
+              )
               const AlphaBetaStartTime = performance.now()
               const answer = algoritm.alphaBeta(chartValue)
               const AlphaBetaEndTime = performance.now()
 
-              const maxMinStartTime = performance.now()
-              algoritm.minMax(chartValue)
-              const maxMinEndTime = performance.now()
+              if (length === 3) {
+                const maxMinStartTime = performance.now()
+                algoritm.minMax(chartValue)
+                const maxMinEndTime = performance.now()
+                console.log(
+                  `MinMax time: ${maxMinEndTime - maxMinStartTime} ms`
+                )
+              }
 
               console.log(
                 `AlphaBeta time: ${AlphaBetaEndTime - AlphaBetaStartTime} ms`
               )
-              console.log(`MinMax time: ${maxMinEndTime - maxMinStartTime} ms`)
 
               if (answer) {
                 setchartValue([...answer])
