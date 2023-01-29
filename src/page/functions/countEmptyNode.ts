@@ -11,13 +11,3 @@ export const countEmptyNode = (chartValue: ChartIndex[]): number => {
   })
   return number
 }
-
-export const findEmptyNode = (chartValue: ChartIndex[]): number => {
-  let number = 0
-  chartValue.forEach((item, i) => {
-    if (ChartIndex.EMPTY === item) {
-      number = i
-    }
-  })
-  return number
-}
