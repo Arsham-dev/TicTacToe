@@ -3,7 +3,6 @@ import Modal from 'react-modal'
 import React, { useEffect, useState } from 'react'
 import Chart, { ChartIndex } from './Chart'
 import checkGameIsOver from './functions/checkGameIsOver'
-import choiceTheNextMove from './functions/choiceTheNextMove'
 import { countEmptyNode } from './functions/countEmptyNode'
 import Algorithms from './classes/Algorithms'
 
@@ -36,22 +35,24 @@ const MainModal: React.FC<PageProps> = ({
       countEmptyNode(chartValue) === 0
     ) {
       setisGameOver(true)
-      console.log('Game is over')
     }
   }, [chartValue])
 
-  const move = (turnMove: ChartIndex) => {
+  const move = (turnMove: ChartIndex, chart: ChartIndex[]) => {
     if (checkGameIsOver(chartValue, length)) {
       return
     }
-    const answer = choiceTheNextMove(chartValue, 5, turnMove, length)
+    const algoritm = new Algorithms(gameLevel, turnMove)
+    const answer = algoritm.AlphaBeta(chart)
 
     if (answer) {
-      chartValue[Number(answer)] = turnMove
-      setchartValue([...chartValue])
+      setchartValue([...answer])
       setturn(turnMove)
       setTimeout(
-        () => move(turnMove === ChartIndex.X ? ChartIndex.O : ChartIndex.X),
+        () =>
+          move(turnMove === ChartIndex.X ? ChartIndex.O : ChartIndex.X, [
+            ...answer
+          ]),
         100
       )
     }
@@ -100,14 +101,7 @@ const MainModal: React.FC<PageProps> = ({
             style={{ marginTop: 20, backgroundColor: 'tan' }}
             onClick={() => {
               if (isGameOver) return
-              // const answer = choiceTheNextMove(chartValue, gameLevel, turn)
-
-              // if (answer) {
-              //   chartValue[Number(answer)] = turn
-              //   setchartValue([...chartValue])
-              //   setturn(turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X)
-              // }
-              const algoritm = new Algorithms(7)
+              const algoritm = new Algorithms(gameLevel, turn)
               const answer = algoritm.AlphaBeta(chartValue)
               if (answer) {
                 setchartValue([...answer])
@@ -121,7 +115,7 @@ const MainModal: React.FC<PageProps> = ({
           <button
             style={{ marginTop: 20, backgroundColor: 'tan' }}
             onClick={() => {
-              move(turn)
+              move(turn, chartValue)
             }}>
             Start
           </button>

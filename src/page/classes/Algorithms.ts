@@ -3,10 +3,16 @@ import checkGameIsOver from '../functions/checkGameIsOver'
 import NodeStatus from './Node'
 
 class Algorithms {
-  depth!: number
+  private depth!: number
 
-  constructor(depth: number) {
+  private turn!: ChartIndex
+
+  private enemyTurn!: ChartIndex
+
+  constructor(depth: number, turn: ChartIndex) {
     this.depth = depth
+    this.turn = turn
+    this.enemyTurn = turn === ChartIndex.X ? ChartIndex.O : ChartIndex.X
   }
 
   private CreateSuccessors(node: NodeStatus, sign: ChartIndex): NodeStatus[] {
@@ -36,7 +42,7 @@ class Algorithms {
     }
 
     let v = Infinity
-    const children = this.CreateSuccessors(node, ChartIndex.O)
+    const children = this.CreateSuccessors(node, this.enemyTurn)
 
     for (let i = 0; i < children.length; i++) {
       const element = children[i]
@@ -58,7 +64,7 @@ class Algorithms {
       return this.evaluation(node.state)
     }
     let v = -Infinity
-    const children = this.CreateSuccessors(node, ChartIndex.X)
+    const children = this.CreateSuccessors(node, this.turn)
 
     for (let i = 0; i < children.length; i++) {
       const element = children[i]
@@ -96,7 +102,7 @@ class Algorithms {
     }
 
     let num = Infinity
-    const children = this.CreateSuccessors(node, ChartIndex.O)
+    const children = this.CreateSuccessors(node, this.enemyTurn)
 
     for (let i = 0; i < children.length; i++) {
       const element = children[i]
@@ -128,7 +134,7 @@ class Algorithms {
       return this.evaluation(node.state)
     }
 
-    const children = this.CreateSuccessors(node, ChartIndex.X)
+    const children = this.CreateSuccessors(node, this.turn)
     let v = -Infinity
 
     for (let i = 0; i < children.length; i++) {
@@ -160,25 +166,27 @@ class Algorithms {
     return null
   }
 
-  public evaluation(state: ChartIndex[]): number {
+  private evaluation(state: ChartIndex[]): number {
     let ans = 0
 
     for (let i = 0; i < 3; i++) {
       const row = state.slice(i * 3, i * 3 + 3)
 
       if (
-        row.every((item) => item === ChartIndex.X || item === ChartIndex.EMPTY)
+        row.every((item) => item === this.turn || item === ChartIndex.EMPTY)
       ) {
-        if (row.every((item) => item === ChartIndex.X)) {
+        if (row.every((item) => item === this.turn)) {
           return Infinity
         }
         ans += 1
       }
 
       if (
-        row.every((item) => item === ChartIndex.O || item === ChartIndex.EMPTY)
+        row.every(
+          (item) => item === this.enemyTurn || item === ChartIndex.EMPTY
+        )
       ) {
-        if (row.every((item) => item === ChartIndex.O)) {
+        if (row.every((item) => item === this.enemyTurn)) {
           return -Infinity
         }
         ans -= 1
@@ -187,18 +195,20 @@ class Algorithms {
       const col = state.filter((item, index) => index % 3 === i)
 
       if (
-        col.every((item) => item === ChartIndex.X || item === ChartIndex.EMPTY)
+        col.every((item) => item === this.turn || item === ChartIndex.EMPTY)
       ) {
-        if (col.every((item) => item === ChartIndex.X)) {
+        if (col.every((item) => item === this.turn)) {
           return Infinity
         }
         ans += 1
       }
 
       if (
-        col.every((item) => item === ChartIndex.O || item === ChartIndex.EMPTY)
+        col.every(
+          (item) => item === this.enemyTurn || item === ChartIndex.EMPTY
+        )
       ) {
-        if (col.every((item) => item === ChartIndex.O)) {
+        if (col.every((item) => item === this.enemyTurn)) {
           return -Infinity
         }
         ans -= 1
@@ -209,10 +219,10 @@ class Algorithms {
 
     if (
       diagonalOne.every(
-        (item) => item === ChartIndex.X || item === ChartIndex.EMPTY
+        (item) => item === this.turn || item === ChartIndex.EMPTY
       )
     ) {
-      if (diagonalOne.every((item) => item === ChartIndex.X)) {
+      if (diagonalOne.every((item) => item === this.turn)) {
         return Infinity
       }
       ans += 1
@@ -220,10 +230,10 @@ class Algorithms {
 
     if (
       diagonalOne.every(
-        (item) => item === ChartIndex.O || item === ChartIndex.EMPTY
+        (item) => item === this.enemyTurn || item === ChartIndex.EMPTY
       )
     ) {
-      if (diagonalOne.every((item) => item === ChartIndex.O)) {
+      if (diagonalOne.every((item) => item === this.enemyTurn)) {
         return -Infinity
       }
       ans -= 1
@@ -231,10 +241,10 @@ class Algorithms {
 
     if (
       diagonalTwo.every(
-        (item) => item === ChartIndex.X || item === ChartIndex.EMPTY
+        (item) => item === this.turn || item === ChartIndex.EMPTY
       )
     ) {
-      if (diagonalTwo.every((item) => item === ChartIndex.X)) {
+      if (diagonalTwo.every((item) => item === this.turn)) {
         return Infinity
       }
       ans += 1
@@ -242,10 +252,10 @@ class Algorithms {
 
     if (
       diagonalTwo.every(
-        (item) => item === ChartIndex.O || item === ChartIndex.EMPTY
+        (item) => item === this.enemyTurn || item === ChartIndex.EMPTY
       )
     ) {
-      if (diagonalTwo.every((item) => item === ChartIndex.O)) {
+      if (diagonalTwo.every((item) => item === this.enemyTurn)) {
         return -Infinity
       }
       ans -= 1

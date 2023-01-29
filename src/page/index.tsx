@@ -4,7 +4,7 @@ import MainModal from './modal'
 const Page = () => {
   const [isOpen, setisOpen] = useState(false)
   const [gameType, setgameType] = useState<string>('person-bot')
-  const [length, setlength] = useState<number>(3)
+  // const [length, setlength] = useState<number>(3)
   const [gameLevel, setgameLevel] = useState<number>(1)
 
   return (
@@ -82,8 +82,8 @@ const Page = () => {
               type="radio"
               name="game-level"
               id="easy"
-              checked={gameLevel === 1}
-              onChange={() => setgameLevel(1)}
+              checked={gameLevel === 5}
+              onChange={() => setgameLevel(5)}
             />
             &nbsp;
             <label htmlFor="easy">Easy</label>
@@ -93,8 +93,8 @@ const Page = () => {
               type="radio"
               name="game-level"
               id="regular"
-              checked={gameLevel === 3}
-              onChange={() => setgameLevel(3)}
+              checked={gameLevel === 7}
+              onChange={() => setgameLevel(7)}
             />
             &nbsp;
             <label htmlFor="regular">Regular</label>
@@ -104,14 +104,14 @@ const Page = () => {
               type="radio"
               name="game-level"
               id="hard"
-              checked={gameLevel === 5}
-              onChange={() => setgameLevel(5)}
+              checked={gameLevel === 9}
+              onChange={() => setgameLevel(9)}
             />
             &nbsp;
             <label htmlFor="hard">Hard</label>
           </div>
         </div>
-        <div
+        {/* <div
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -145,7 +145,7 @@ const Page = () => {
               }
             />
           </div>
-        </div>
+        </div> */}
       </form>
       <button onClick={() => setisOpen(!isOpen)} style={{ marginTop: 20 }}>
         Open
@@ -154,7 +154,7 @@ const Page = () => {
         <MainModal
           isOpen={isOpen}
           onClose={() => setisOpen(false)}
-          length={length}
+          length={3}
           isBotBattle={gameType === 'bot-bot'}
           gameLevel={gameLevel}
         />
