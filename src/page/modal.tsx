@@ -112,7 +112,7 @@ const MainModal: React.FC<PageProps> = ({
         turn={turn}
         setturn={setturn}
       />
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', columnGap: 20 }}>
         {!isBotBattle && (
           <button
             style={{ marginTop: 20, backgroundColor: 'tan' }}
